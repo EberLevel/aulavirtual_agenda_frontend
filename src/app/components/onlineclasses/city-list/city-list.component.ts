@@ -5,6 +5,7 @@ import { AeCityFormComponent } from './ae-city-form/ae-city-form.component';
 import { HelpersService } from 'src/app/helpers.service';
 import { CiudadService } from '../service/ciudad.service';
 import { DatosPersonalesCandidatoComponent } from '../../agendaVirtual/datos-personales-candidato/datos-personales-candidato.component';
+import { CandidatoService } from '../service/candidato.service';
 
 interface City {
     code: string;
@@ -30,7 +31,8 @@ export class CityListComponent {
     constructor(
         private dialogService: DialogService,
         private ciudadService: CiudadService,
-        private helpersService: HelpersService
+        private helpersService: HelpersService,
+        private candidatoService: CandidatoService
     ) {}
 
     ngOnInit(): void {
@@ -44,10 +46,23 @@ export class CityListComponent {
         this.loading = true;
         this.ciudadService.getCiudadesByDomain(this.domain_id).subscribe(
             (response: any) => {
-    
-                // Asigna directamente la respuesta ya que ahora es un array de ciudades
                 this.ciudadesList = response;
-                this.filteredCities = [...this.ciudadesList]; // Inicializa `filteredCities` con la lista completa
+                this.filteredCities = [...this.ciudadesList];
+    
+                // Llamada adicional para obtener la cantidad de candidatos por ciudad
+                this.ciudadesList.forEach(ciudad => {
+                    this.candidatoService.getCandidatosByCiudad(ciudad.id).subscribe(
+                        (candidatosResponse: any) => {
+                            // Agrega la cantidad de candidatos a la ciudad actual
+                            ciudad.cantidadCandidatos = candidatosResponse.data.length;
+                        },
+                        (error) => {
+                            console.error('Error al obtener los candidatos por ciudad:', error);
+                            ciudad.cantidadCandidatos = 0; // Asignar 0 si hay un error
+                        }
+                    );
+                });
+    
                 this.loading = false;
     
                 // Restablece el paginador
@@ -60,7 +75,7 @@ export class CityListComponent {
                 this.loading = false;
             }
         );
-    }
+    }    
     
 // En tu archivo .ts del componente
 formatEstado(estado: string): string {

@@ -12,7 +12,7 @@
     </ng-template>
 
     <ng-template pTemplate="content">
-        <form [formGroup]="postulanteForm" (ngSubmit)="guardarPostulante()" (keydown)="focusNextElement($event)">
+        <form [formGroup]="postulanteForm" (ngSubmit)="guardarPostulante()">
             <div class="row">
                 <div class="grid p-fluid">
                     <div class="field col-6">
@@ -42,7 +42,7 @@
                                 type="text"
                                 pInputText
                                 formControlName="apaterno"
-                                [tabindex]="0"
+                                [tabindex]="2"
                             />
                             <label>Apellido Paterno</label>
                         </span>
@@ -54,6 +54,7 @@
                                 type="text"
                                 pInputText
                                 formControlName="nombre"
+                                [tabindex]="3"
                             />
                             <label>Nombres</label>
                         </span>
@@ -64,6 +65,7 @@
                                 type="text"
                                 pInputText
                                 formControlName="numero_documento"
+                                [tabindex]="4"
                             />
                             <label>Número de documento</label>
                         </span>
@@ -125,6 +127,7 @@
                         <span class="p-float-label">
                             <p-calendar
                                 formControlName="fecha_nacimiento"
+                                [dateFormat]="'dd/mm/yy'"
                             ></p-calendar>
                             <label>Fecha de nacimiento</label>
                         </span>
