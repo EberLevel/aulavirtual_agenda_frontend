@@ -12,7 +12,7 @@
     </ng-template>
 
     <ng-template pTemplate="content">
-        <form [formGroup]="postulanteForm" (ngSubmit)="guardarPostulante()">
+        <form [formGroup]="postulanteForm" (ngSubmit)="guardarPostulante()" (keydown)="focusNextElement($event)">
             <div class="row">
                 <div class="grid p-fluid">
                     <div class="field col-6">
@@ -30,17 +30,8 @@
                             <input
                                 type="text"
                                 pInputText
-                                formControlName="apaterno"
-                            />
-                            <label>Apellido Paterno</label>
-                        </span>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <input
-                                type="text"
-                                pInputText
                                 formControlName="amaterno"
+                                [tabindex]="1"
                             />
                             <label>Apellido Materno</label>
                         </span>
@@ -50,36 +41,21 @@
                             <input
                                 type="text"
                                 pInputText
-                                formControlName="nombre"
+                                formControlName="apaterno"
+                                [tabindex]="0"
                             />
-                            <label>Nombres</label>
+                            <label>Apellido Paterno</label>
                         </span>
                     </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <p-dropdown
-                                [options]="generoOptions"
-                                formControlName="genero"
-                            ></p-dropdown>
-                            <label>Género</label>
-                        </span>
-                    </div>
+
                     <div class="field col-6">
                         <span class="p-float-label">
                             <input
                                 type="text"
                                 pInputText
-                                formControlName="telefono"
+                                formControlName="nombre"
                             />
-                            <label>Teléfono</label>
-                        </span>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <p-calendar
-                                formControlName="fecha_nacimiento"
-                            ></p-calendar>
-                            <label>Fecha de nacimiento</label>
+                            <label>Nombres</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -95,16 +71,6 @@
                     <div class="field col-6">
                         <span class="p-float-label">
                             <input
-                                type="email"
-                                pInputText
-                                formControlName="email"
-                            />
-                            <label>Email</label>
-                        </span>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <input
                                 type="password"
                                 pInputText
                                 formControlName="contrasena"
@@ -113,18 +79,54 @@
                             <label>Contraseña</label>
                         </span>
                     </div>
-                    
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="profesion"
+                            />
+                            <label>Profesión - Ocupación</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="puesto"
+                            />
+                            <label>Puesto</label>
+                        </span>
+                    </div>
 
                     <div class="field col-6">
                         <span class="p-float-label">
-                            <p-dropdown
-                                [options]="identificationDocuments"
-                                formControlName="doc_identidad"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="Seleccione un documento"
-                            ></p-dropdown>
-                            <label for="doc_identidad">Doc. Identidad</label>
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="telefono"
+                            />
+                            <label>Teléfono</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="email"
+                                pInputText
+                                formControlName="email"
+                            />
+                            <label>Email</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-calendar
+                                formControlName="fecha_nacimiento"
+                            ></p-calendar>
+                            <label>Fecha de nacimiento</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -135,6 +137,15 @@
                                 formControlName="edad"
                             />
                             <label>Edad</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="generoOptions"
+                                formControlName="genero"
+                            ></p-dropdown>
+                            <label>Género</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -151,90 +162,6 @@
                     </div>
                     <div class="field col-6">
                         <span class="p-float-label">
-                            <input
-                                type="text"
-                                pInputText
-                                formControlName="puesto"
-                            />
-                            <label>Puesto</label>
-                        </span>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <input
-                                type="text"
-                                pInputText
-                                formControlName="grado_instruccion"
-                            />
-                            <label>% de Avance</label>
-                        </span>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <input
-                                type="text"
-                                pInputText
-                                formControlName="profesion"
-                            />
-                            <label>Profesión - Ocupación</label>
-                        </span>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <p-dropdown
-                                [options]="afiliacionOptions"
-                                formControlName="ocupacion_actual"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="Seleccione Afiliación"
-                            >
-                            </p-dropdown>
-                            <label>Estado de Afiliación</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <p-fileUpload
-                                mode="basic"
-                                chooseLabel="Adjunte documento"
-                                chooseIcon="pi pi-upload"
-                                (onSelect)="onFileChange($event)"
-                            >
-                            </p-fileUpload>
-                        </span>
-                        <small *ngIf="postulanteForm.get('imagen')?.value">
-                            Archivo cargado con éxito
-                        </small>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <p-dropdown
-                                [options]="estadoOptions"
-                                formControlName="estado_actual"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="Seleccione Estado"
-                                (onChange)="onEstadoChange($event)"
-                                [style]="{
-                                    'background-color': selectedEstadoColor
-                                }"
-                            >
-                            </p-dropdown>
-                            <label>Estado</label>
-                        </span>
-                    </div>
-                    <div class="field col-6">
-                        <span class="p-float-label">
-                            <p-calendar
-                                formControlName="fecha_afiliacion"
-                            ></p-calendar>
-                            <label>Fecha de afiliación</label>
-                        </span>
-                    </div>
-
-                    <div class="field col-6">
-                        <span class="p-float-label">
                             <p-dropdown
                                 [options]="departamentoOptions"
                                 formControlName="departamentos"
@@ -246,7 +173,6 @@
                             <label>Departamento</label>
                         </span>
                     </div>
-
                     <div class="field col-6">
                         <span class="p-float-label">
                             <p-dropdown
@@ -274,6 +200,92 @@
                             <label>Distrito</label>
                         </span>
                     </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="afiliacionOptions"
+                                formControlName="ocupacion_actual"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Seleccione Afiliación"
+                            >
+                            </p-dropdown>
+                            <label>Estado de Afiliación</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="estadoOptions"
+                                formControlName="estado_actual"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Seleccione Estado"
+                                (onChange)="onEstadoChange($event)"
+                                [style]="{
+                                    'background-color': selectedEstadoColor
+                                }"
+                            >
+                            </p-dropdown>
+                            <label>Estado</label>
+                        </span>
+                    </div>
+
+                    <!-- <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="identificationDocuments"
+                                formControlName="doc_identidad"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Seleccione un documento"
+                            ></p-dropdown>
+                            <label for="doc_identidad">Doc. Identidad</label>
+                        </span>
+                    </div> -->
+
+
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="grado_instruccion"
+                            />
+                            <label>% de Avance</label>
+                        </span>
+                    </div>
+
+
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-fileUpload
+                                mode="basic"
+                                chooseLabel="Adjunte documento"
+                                chooseIcon="pi pi-upload"
+                                (onSelect)="onFileChange($event)"
+                            >
+                            </p-fileUpload>
+                        </span>
+                        <small *ngIf="postulanteForm.get('imagen')?.value">
+                            Archivo cargado con éxito
+                        </small>
+                    </div>
+
+                    <!-- <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-calendar
+                                formControlName="fecha_afiliacion"
+                            ></p-calendar>
+                            <label>Fecha de afiliación</label>
+                        </span>
+                    </div> -->
+
+
+
+
                 </div>
             </div>
 
