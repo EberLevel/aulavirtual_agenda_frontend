@@ -67,10 +67,16 @@
                                     Código
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
+                                    A. Paterno
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    A. Materno
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
                                     Nombre
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Teléfono
+                                    Celular
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     % de Avance
@@ -80,9 +86,6 @@
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Documento de Identidad
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Fecha de Afiliación
                                 </th>
                             </tr>
                         </ng-template>
@@ -117,6 +120,10 @@
                                     ></button>
                                 </td>
                                 <td>{{ postulante.code || "Sin código" }}</td>
+
+                                <td>{{ postulante.apaterno || "Sin apellido paterno" }}</td>
+                                <td>{{ postulante.amaterno || "Sin apellido materno" }}</td>
+
                                 <td>{{ postulante.nombre || "Sin nombre" }}</td>
                                 <td>
                                     {{ postulante.phone || "Sin teléfono" }}
@@ -140,14 +147,6 @@
                                     {{
                                         postulante.identification_number ||
                                             "Sin documento"
-                                    }}
-                                </td>
-                                <td>
-                                    {{
-                                        postulante.date_affiliation
-                                            ? (postulante.date_affiliation
-                                              | date : "dd/MM/yyyy")
-                                            : "Sin fecha de afiliación"
                                     }}
                                 </td>
                             </tr>
