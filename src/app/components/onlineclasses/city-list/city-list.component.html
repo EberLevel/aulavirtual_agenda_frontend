@@ -52,6 +52,7 @@
                                 <th scope="col">Acciones</th>
                                 <th scope="col">Código</th>
                                 <th scope="col">Nombre</th>
+                                <th scope="col">Registros</th>
                                 <th scope="col">% de avance</th>
                                 <th scope="col">Estado</th>
                             </tr>
@@ -90,6 +91,7 @@
                                 </td>
                                 <td>{{ ciudad.codigo }}</td>
                                 <td>{{ ciudad.nombre }}</td>
+                                <td>{{ ciudad.cantidadCandidatos || 0 }}</td>
                                 <td>{{ ciudad.avance }}</td>
                                 <td>
                                     <div class="estColor"
