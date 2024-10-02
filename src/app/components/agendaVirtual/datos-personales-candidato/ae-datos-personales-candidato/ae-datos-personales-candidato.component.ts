@@ -422,4 +422,43 @@ export class AeDatosPersonalesCandidatoComponent {
     onChangeDistrito(event: any) {
         this.distritoId = event.value;
     }
+
+    focusNextElement(event: KeyboardEvent) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            console.log('Tab key pressed');
+    
+            // Verificar que event.target no sea null y sea un HTMLElement
+            const targetElement = event.target as HTMLElement | null;
+    
+            if (targetElement) {
+                // Obtener el formulario que contiene el elemento actual
+                const form = targetElement.closest('form') as HTMLElement | null;
+    
+                if (form) {
+                    // Seleccionar todos los elementos que pueden recibir foco dentro del formulario actual
+                    const focusableElements = '[tabindex]:not([tabindex="-1"])';
+                    const focusable = Array.from(form.querySelectorAll(focusableElements)) as HTMLElement[];
+    
+                    // Log para verificar los elementos seleccionados
+                    console.log('Focusable elements:', focusable);
+    
+                    // Encontrar el índice del elemento actualmente enfocado
+                    const index = focusable.indexOf(document.activeElement as HTMLElement);
+    
+                    // Calcular el siguiente índice
+                    const nextIndex = event.shiftKey ? index - 1 : index + 1;
+    
+                    // Log para verificar el siguiente índice
+                    console.log('Current index:', index, 'Next index:', nextIndex);
+    
+                    // Enfocar el siguiente o anterior elemento si está dentro de los límites
+                    if (nextIndex >= 0 && nextIndex < focusable.length) {
+                        focusable[nextIndex].focus();
+                        console.log('Focused on:', focusable[nextIndex]);
+                    }
+                }
+            }
+        }
+    }
 }
