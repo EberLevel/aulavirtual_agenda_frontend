@@ -67,13 +67,16 @@
                                     Código
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
+                                    DNI
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
                                     A. Paterno
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     A. Materno
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Nombre
+                                    Nombres
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Celular
@@ -83,10 +86,16 @@
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Estado
-                                </th>
+                                </th>   
                                 <th style="min-width: 10rem" scope="col">
-                                    Documento de Identidad
-                                </th>
+                                    Región
+                                </th>   
+                                <th style="min-width: 10rem" scope="col">
+                                    Provincia
+                                </th>   
+                                <th style="min-width: 10rem" scope="col">
+                                    Distrito
+                                </th>                                
                             </tr>
                         </ng-template>
 
@@ -120,6 +129,12 @@
                                     ></button>
                                 </td>
                                 <td>{{ postulante.code || "Sin código" }}</td>
+                                <td>
+                                    {{
+                                        postulante.identification_number ||
+                                            "Sin documento"
+                                    }}
+                                </td>
 
                                 <td>{{ postulante.apaterno || "Sin apellido paterno" }}</td>
                                 <td>{{ postulante.amaterno || "Sin apellido materno" }}</td>
@@ -141,14 +156,10 @@
                                         }">
                                         {{ formatEstado(postulante.estado_actual) }}
                                     </div>
-                                </td>
-                                
-                                <td>
-                                    {{
-                                        postulante.identification_number ||
-                                            "Sin documento"
-                                    }}
-                                </td>
+                                </td>    
+                                <td>{{ postulante?.distrito?.department?.name}}</td>
+                                <td>{{ postulante?.distrito?.province?.name}}</td>
+                                <td>{{ postulante?.distrito?.name}}</td>                                
                             </tr>
                         </ng-template>
 
