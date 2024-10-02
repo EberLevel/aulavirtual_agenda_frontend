@@ -14,7 +14,9 @@ export class CandidatoService {
   getCandidatos(domain_id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}candidatos/domain/${domain_id}`);
   }
-
+  getCandidatosCountByCiudad(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}candidatos/ciudad/count/${id}`);
+  }
   getCandidatoById(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}candidatos/${id}`);
   }
