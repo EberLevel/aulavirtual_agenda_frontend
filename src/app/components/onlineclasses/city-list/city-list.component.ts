@@ -27,6 +27,7 @@ export class CityListComponent {
     domain_id: any;
     filteredCities: any[] = [];
     rol_id: any;
+    cantidadCandidatos: any;
 
     constructor(
         private dialogService: DialogService,
@@ -51,13 +52,13 @@ export class CityListComponent {
     
                 // Llamada adicional para obtener la cantidad de candidatos por ciudad
                 this.ciudadesList.forEach(ciudad => {
-                    this.candidatoService.getCandidatosByCiudad(ciudad.id).subscribe(
-                        (candidatosResponse: any) => {
-                            // Agrega la cantidad de candidatos a la ciudad actual
-                            ciudad.cantidadCandidatos = candidatosResponse.data.length;
+                    this.candidatoService.getCandidatosCountByCiudad(ciudad.id).subscribe(
+                        (cantidadResponse: any) => {
+                            console.log('Cantidad de candidatos para la ciudad:', cantidadResponse);
+                            ciudad.cantidadCandidatos = cantidadResponse.cantidadCandidatos; // Asigna la cantidad a ciudad
                         },
                         (error) => {
-                            console.error('Error al obtener los candidatos por ciudad:', error);
+                            console.error('Error al obtener la cantidad de candidatos por ciudad:', error);
                             ciudad.cantidadCandidatos = 0; // Asignar 0 si hay un error
                         }
                     );
@@ -75,7 +76,9 @@ export class CityListComponent {
                 this.loading = false;
             }
         );
-    }    
+    }
+    
+     
     
 // En tu archivo .ts del componente
 formatEstado(estado: string): string {

@@ -51,21 +51,22 @@ export class DatosPersonalesCandidatoComponent {
         if (this.ciudad_id) {
             // Listar candidatos por ciudad
             this.candidatoService
-                .getCandidatosByCiudad(this.ciudad_id)
-                .subscribe(
-                    (response: any) => {
-                        this.candidatoList = response.data;
-                        this.originalCandidatoList = [...response.data];
-                        this.loading = false;
-                    },
-                    (error) => {
-                        console.error(
-                            'Error al obtener los candidatos por ciudad:',
-                            error
-                        );
-                        this.loading = false;
-                    }
-                );
+            .getCandidatosByCiudad(this.ciudad_id)
+            .subscribe(
+                (response: any) => {
+                    console.log('Candidatos obtenidos por ciudad:', response); // Verifica la respuesta
+                    this.candidatoList = response; // Ajustar según la nueva estructura
+                    this.originalCandidatoList = [...response];
+                    this.loading = false;
+                },
+                (error) => {
+                    console.error(
+                        'Error al obtener los candidatos por ciudad:',
+                        error
+                    );
+                    this.loading = false;
+                }
+            );
         } else if (this.candidato_id) {
             // Listar candidatos por candidato_id si ciudad_id no está disponible
             this.candidatoService.getCandidatoById(this.candidato_id).subscribe(
