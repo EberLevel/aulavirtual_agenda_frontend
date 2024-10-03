@@ -161,9 +161,9 @@
                                         {{ formatEstado(postulante.estado_actual) }}
                                     </div>
                                 </td>    
-                                <td>{{ postulante?.distrito?.department?.name}}</td>
-                                <td>{{ postulante?.distrito?.province?.name}}</td>
-                                <td>{{ postulante?.distrito?.name}}</td>                                
+                                <td>{{ postulante?.distrito?.department?.name || "Sin Region"}} </td>
+                                <td>{{ postulante?.distrito?.province?.name || "Sin Provincia"}}</td>
+                                <td>{{ postulante?.distrito?.name || "Sin Distrito"}}</td>                                
                             </tr>
                         </ng-template>
 
