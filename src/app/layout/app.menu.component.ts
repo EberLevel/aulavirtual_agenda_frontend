@@ -724,6 +724,11 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Candidatos',
                                 icon: 'pi pi-users',
                                 routerLink: ['/pl-virtual/lista-ciudades'],
+                            },
+                            {
+                                label: 'Reportes',
+                                icon: 'pi pi-users',
+                                routerLink: ['/pl-virtual/reporte-candidato'],
                             }
                         ],
                     },

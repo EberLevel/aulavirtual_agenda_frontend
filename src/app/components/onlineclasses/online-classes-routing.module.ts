@@ -63,6 +63,14 @@ const routes: Routes = [];
                     ).then((m) => m.DatosPersonalesCandidatoModule),
             },
             {
+                path: 'reporte-candidato',
+                data: { breadcrumb: 'Reporte de Candidatos' },
+                loadChildren: () =>
+                    import(
+                        '../agendaVirtual/reporte-datos-personal/reporte-datos-personal.module'
+                    ).then((m) => m.ReporteDatosPersonalModule),
+            },
+            {
                 path: 'informacion-academica-candidato',
                 data: { breadcrumb: 'Informacion academica del candidato' },
                 loadChildren: () =>
