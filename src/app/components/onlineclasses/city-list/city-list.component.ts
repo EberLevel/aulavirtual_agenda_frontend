@@ -29,6 +29,16 @@ export class CityListComponent {
     rol_id: any;
     cantidadCandidatos: any;
 
+    estadoOptions: any[] = [
+        { label: 'Todos', value: null }, // Null para "Todos"
+        { label: 'Aprobado', value: 'aprobado' },
+        { label: 'Desaprobado', value: 'desaprobado' },
+        { label: 'Observado', value: 'observado' },
+        { label: 'En Evaluación', value: 'en_evaluacion' },
+    ];
+
+    selectedEstado: any = null;
+
     constructor(
         private dialogService: DialogService,
         private ciudadService: CiudadService,
@@ -163,6 +173,23 @@ formatEstado(estado: string): string {
                     ciudad.nombre.toLowerCase().includes(filterValue) ||
                     ciudad.codigo.toLowerCase().includes(filterValue)
             );
+        }
+
+        // Restablece el paginador
+        if (this.dt1) {
+            this.dt1.reset();
+        }
+    }
+    
+    onEstadoFilter(event: any) {
+        const estadoSeleccionado = event.value;
+
+        if (!estadoSeleccionado) {
+            // Si no se seleccionó un estado, mostrar todas las ciudades
+            this.filteredCities = [...this.ciudadesList];
+        } else {
+            // Filtrar las ciudades según el estado seleccionado
+            this.filteredCities = this.ciudadesList.filter(ciudad => ciudad.estado === estadoSeleccionado);
         }
 
         // Restablece el paginador

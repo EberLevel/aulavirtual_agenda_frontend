@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AeDatosPersonalesCandidatoComponent } from '../datos-personales-candidato/ae-datos-personales-candidato/ae-datos-personales-candidato.component';
 import {
     DynamicDialogRef,
     DialogService,
@@ -7,14 +8,14 @@ import {
 import { HelpersService } from 'src/app/helpers.service';
 import Swal from 'sweetalert2';
 import { CandidatoService } from '../../onlineclasses/service/candidato.service';
-import { AeDatosPersonalesCandidatoComponent } from './ae-datos-personales-candidato/ae-datos-personales-candidato.component';
+import * as XLSX from 'xlsx';
 
 @Component({
-    selector: 'app-datos-personales-candidato',
-    templateUrl: './datos-personales-candidato.component.html',
-    styleUrls: ['./datos-personales-candidato.component.scss'],
+    selector: 'app-reporte-datos-personal',
+    templateUrl: './reporte-datos-personal.component.html',
+    styleUrls: ['./reporte-datos-personal.component.scss'],
 })
-export class DatosPersonalesCandidatoComponent {
+export class ReporteDatosPersonalComponent {
     loading: boolean = false;
     candidatoList: any[] = [];
     originalCandidatoList: any[] = [];
@@ -31,7 +32,7 @@ export class DatosPersonalesCandidatoComponent {
         { label: 'En Evaluación', value: 'en_evaluacion' },
     ];
 
-    selectedEstado: any = null; 
+    selectedEstado: any = null;
 
     constructor(
         private dialogService: DialogService,
@@ -45,68 +46,27 @@ export class DatosPersonalesCandidatoComponent {
         this.candidato_id = this.helpersService.getCandidatoId();
 
         this.selectedEstado = null;
-        // Verificar si config y config.data existen antes de acceder a ciudad
-        if (this.config && this.config.data) {
-            this.ciudad_id = this.config.data.ciudad?.id; // Asegúrate de usar la propiedad correcta del objeto `ciudad`
-        } else {
-            console.error(
-                'No se recibieron los datos de configuración necesarios.'
-            );
-        }
-
-
         this.listarPostulantesSegunRol();
     }
 
     listarPostulantesSegunRol() {
         this.loading = true;
 
-        if (this.ciudad_id) {
-            // Listar candidatos por ciudad
-            this.candidatoService
-            .getCandidatosByCiudad(this.ciudad_id)
-            .subscribe(
-                (response: any) => {
-                    console.log('Candidatos obtenidos por ciudad:', response); // Verifica la respuesta
-                    this.candidatoList = response; // Ajustar según la nueva estructura
-                    this.originalCandidatoList = [...response];
-                    this.loading = false;
-                },
-                (error) => {
-                    console.error(
-                        'Error al obtener los candidatos por ciudad:',
-                        error
-                    );
-                    this.loading = false;
-                }
-            );
-        } else if (this.candidato_id) {
-            // Listar candidatos por candidato_id si ciudad_id no está disponible
-            this.candidatoService.getCandidatoById(this.candidato_id).subscribe(
-                (response: any) => {
-                    console.log(
-                        'Respuesta del backend para getCandidatoById:',
-                        response
-                    );
-                    // Acceder correctamente al objeto candidato
-                    this.candidatoList = response.candidato
-                        ? [response.candidato]
-                        : [];
-                    this.originalCandidatoList = [...this.candidatoList];
-                    this.loading = false;
-                },
-                (error) => {
-                    console.error(
-                        'Error al obtener el candidato por ID:',
-                        error
-                    );
-                    this.loading = false;
-                }
-            );
-        } else {
-            console.error('No se proporcionó ciudad_id ni candidato_id.');
-            this.loading = false;
-        }
+        this.candidatoService.getCandidatos(this.domain_id).subscribe(
+            (response: any) => {
+                console.log('Candidatos obtenidos por dominio:', response);
+                this.candidatoList = response; // Directamente asigna la respuesta
+                this.originalCandidatoList = [...this.candidatoList]; // Copia para filtros
+                this.loading = false;
+            },
+            (error: any) => {
+                console.error(
+                    'Error al obtener los candidatos por dominio:',
+                    error
+                );
+                this.loading = false;
+            }
+        );
     }
 
     // En tu archivo .ts del componente
@@ -222,7 +182,7 @@ export class DatosPersonalesCandidatoComponent {
 
     onEstadoFilter(event: any) {
         const estadoSeleccionado = event.value;
-        this.candidatoList = this.originalCandidatoList.filter(postulante => {
+        this.candidatoList = this.originalCandidatoList.filter((postulante) => {
             // Si no se seleccionó un estado, retornar todos
             if (!estadoSeleccionado) {
                 return true; // Retorna todos los candidatos
@@ -230,4 +190,27 @@ export class DatosPersonalesCandidatoComponent {
             return postulante.estado_actual === estadoSeleccionado;
         });
     }
+    exportarAExcel() {
+        const exportData = this.candidatoList.map(postulante => ({
+            'Código': postulante.code || 'Sin código',
+            'A. Paterno': postulante.apaterno || 'Sin apellido paterno',
+            'A. Materno': postulante.amaterno || 'Sin apellido materno',
+            'Nombre': postulante.nombre || 'Sin nombre',
+            'Celular': postulante.phone || 'Sin teléfono',
+            '% de Avance': postulante.education_degree_id || 'Sin % de Avance',
+            'Estado': this.formatEstado(postulante.estado_actual),
+            'Documento de Identidad': postulante.identification_number || 'Sin documento',
+        }));
+    
+        // Crear una hoja de trabajo
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    
+        // Crear un libro de trabajo y agregar la hoja
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Candidatos');
+    
+        // Guardar el archivo
+        XLSX.writeFile(wb, 'candidatos.xlsx');
+    }
+    
 }

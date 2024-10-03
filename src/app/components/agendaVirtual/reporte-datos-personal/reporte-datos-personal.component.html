@@ -11,7 +11,7 @@
                     <p-table
                         #dt1
                         [value]="candidatoList"
-                        [rows]="10"
+                        [rows]="500"
                         [loading]="loading"
                         [rowHover]="true"
                         styleClass="p-datatable-gridlines"
@@ -33,6 +33,7 @@
                                         />
                                     </span>
                                 </div>
+
                                 <div class="flex-grow-1 mb-2 mr-2">
                                     <p-dropdown
                                         [options]="estadoOptions"
@@ -42,20 +43,14 @@
                                         class="w-full"
                                     ></p-dropdown>
                                 </div>
-                                <div
-                                    class="mb-2"
-                                    *ngIf="
-                                        helpersService.getRolId() !== 25 &&
-                                        helpersService.getRolId() !== 23 && helpersService.getRolId() !== 24
-                                    "
-                                >
+                                <div class="mb-2">
                                     <button
                                         pButton
-                                        label="Nuevo"
-                                        icon="pi pi-plus"
+                                        label="Descargar en Excel"
+                                        icon="pi pi-file-excel"
                                         id="btnNuevo"
-                                        class="p-button-primary mr-2"
-                                        (click)="navigateAddPostulante()"
+                                        class="p-button-success mr-2"
+                                        (click)="exportarAExcel()"
                                         style="border-radius: 30px"
                                     ></button>
                                 </div>
@@ -76,16 +71,13 @@
                                     Código
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    DNI
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
                                     A. Paterno
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     A. Materno
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Nombres
+                                    Nombre
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Celular
@@ -95,16 +87,10 @@
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Estado
-                                </th>   
+                                </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Región
-                                </th>   
-                                <th style="min-width: 10rem" scope="col">
-                                    Provincia
-                                </th>   
-                                <th style="min-width: 10rem" scope="col">
-                                    Distrito
-                                </th>                                
+                                    Documento de Identidad
+                                </th>
                             </tr>
                         </ng-template>
 
@@ -138,12 +124,6 @@
                                     ></button>
                                 </td>
                                 <td>{{ postulante.code || "Sin código" }}</td>
-                                <td>
-                                    {{
-                                        postulante.identification_number ||
-                                            "Sin documento"
-                                    }}
-                                </td>
 
                                 <td>{{ postulante.apaterno || "Sin apellido paterno" }}</td>
                                 <td>{{ postulante.amaterno || "Sin apellido materno" }}</td>
@@ -165,10 +145,14 @@
                                         }">
                                         {{ formatEstado(postulante.estado_actual) }}
                                     </div>
-                                </td>    
-                                <td>{{ postulante?.distrito?.department?.name}}</td>
-                                <td>{{ postulante?.distrito?.province?.name}}</td>
-                                <td>{{ postulante?.distrito?.name}}</td>                                
+                                </td>
+                                
+                                <td>
+                                    {{
+                                        postulante.identification_number ||
+                                            "Sin documento"
+                                    }}
+                                </td>
                             </tr>
                         </ng-template>
 

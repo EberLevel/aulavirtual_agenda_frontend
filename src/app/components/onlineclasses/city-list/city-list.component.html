@@ -30,6 +30,15 @@
                                         />
                                     </span>
                                 </div>
+                                <div class="flex-grow-1 mb-2 mr-2">
+                                    <p-dropdown
+                                        [options]="estadoOptions"
+                                        [(ngModel)]="selectedEstado"
+                                        placeholder="Filtrar por estado"
+                                        (onChange)="onEstadoFilter($event)"
+                                        class="w-full md:w-4"
+                                    ></p-dropdown>
+                                </div>
                                 <div
                                     class="mb-2"
                                     *ngIf="rol_id !== 23 && rol_id !== 24"
@@ -94,16 +103,23 @@
                                 <td>{{ ciudad.cantidadCandidatos || 0 }}</td>
                                 <td>{{ ciudad.avance }}</td>
                                 <td>
-                                    <div class="estColor"
+                                    <div
+                                        class="estColor"
                                         [ngClass]="{
-                                            'estado-aprobado': ciudad.estado === 'aprobado',
-                                            'estado-desaprobado': ciudad.estado === 'desaprobado',
-                                            'estado-observado': ciudad.estado === 'observado',
-                                            'estado-evaluacion': ciudad.estado === 'en_evaluacion'
-                                        }">
+                                            'estado-aprobado':
+                                                ciudad.estado === 'aprobado',
+                                            'estado-desaprobado':
+                                                ciudad.estado === 'desaprobado',
+                                            'estado-observado':
+                                                ciudad.estado === 'observado',
+                                            'estado-evaluacion':
+                                                ciudad.estado ===
+                                                'en_evaluacion'
+                                        }"
+                                    >
                                         {{ formatEstado(ciudad.estado) }}
                                     </div>
-                                </td>                                
+                                </td>
                             </tr>
                         </ng-template>
 
