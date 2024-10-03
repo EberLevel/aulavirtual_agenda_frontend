@@ -193,42 +193,41 @@ export class ReporteDatosPersonalComponent {
     exportarAExcel() {
         // Crear un array con las cabeceras que deseas
         const headers = [
-            'Código',
             'DNI',
             'A. Paterno',
             'A. Materno',
             'Nombres',
-            'Celular',
-            '% de Avance',
+            'DISTRITO',
+            'PROVINCIA',
+            'REGIÓN',
             'Estado',
-            'Región',
-            'Provincia',
-            'Distrito'
+            '% AV',
+            'Celular',
         ];
     
         // Crear un array con los datos formateados
         const data = this.candidatoList.map(postulante => ({
-            code: postulante.code || "Sin código",
-            dni: postulante.identification_number || "Sin documento",
-            apaterno: postulante.apaterno || "Sin apellido paterno",
-            amaterno: postulante.amaterno || "Sin apellido materno",
-            nombre: postulante.nombre || "Sin nombre",
-            celular: postulante.phone || "Sin teléfono",
-            avance: postulante.education_degree_id || "Sin % de Avance",
-            estado: this.formatEstado(postulante.estado_actual),
-            region: postulante?.distrito?.department?.name || "Sin región",
-            provincia: postulante?.distrito?.province?.name || "Sin provincia",
-            distrito: postulante?.distrito?.name || "Sin distrito",
+            'DNI': postulante.identification_number || "Sin documento",
+            'A. Paterno': postulante.apaterno || "Sin apellido paterno",
+            'A. Materno': postulante.amaterno || "Sin apellido materno",
+            'Nombres': postulante.nombre || "Sin nombre",
+            'DISTRITO': postulante?.distrito?.name || "Sin distrito",
+            'PROVINCIA': postulante?.distrito?.province?.name || "Sin provincia",
+            'REGIÓN': postulante?.distrito?.department?.name || "Sin región",
+            'Estado': this.formatEstado(postulante.estado_actual),
+            '% AV': postulante.education_degree_id || "Sin % de Avance",
+            'Celular': postulante.phone || "Sin teléfono",
         }));
     
         // Crear un nuevo libro de Excel
-        const worksheet = XLSX.utils.json_to_sheet(data, { header: Object.keys(data[0]) });
+        const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Candidatos');
     
         // Exportar el archivo
         XLSX.writeFile(workbook, 'candidatos.xlsx');
     }
+    
     
     
 }
