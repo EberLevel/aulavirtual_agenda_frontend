@@ -1,75 +1,41 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl"
-            >Bandeja de Candidatos</span
-        >
+        <span class="text-primary font-semibold text-xl">Bandeja de Candidatos</span>
     </ng-template>
     <ng-template pTemplate="content">
         <div class="row mb-4">
             <div class="grid p-fluid">
                 <div class="field md:col-12">
-                    <p-table
-                        #dt1
-                        [value]="candidatoList"
-                        [rows]="500"
-                        [loading]="loading"
-                        [rowHover]="true"
-                        styleClass="p-datatable-gridlines"
-                        [paginator]="true"
-                        responsiveLayout="scroll"
-                        class="custom-search-input"
-                    >
+                    <p-table #dt1 [value]="candidatoList" [rows]="500" [loading]="loading" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+                        class="custom-search-input">
                         <ng-template pTemplate="caption">
                             <div class="flex justify-content-between flex-wrap">
                                 <div class="flex-grow-1 mb-2 mr-2">
                                     <span class="p-input-icon-left w-full">
-                                        <input
-                                            pInputText
-                                            type="text"
-                                            #filter
-                                            (input)="onGlobalFilter($event)"
-                                            placeholder="Buscar Postulantes"
-                                            class="w-full"
-                                        />
+                                        <input pInputText type="text" #filter (input)="onGlobalFilter($event)"
+                                            placeholder="Buscar Postulantes" class="w-full" />
                                     </span>
                                 </div>
 
                                 <div class="flex-grow-1 mb-2 mr-2">
-                                    <p-dropdown
-                                        [options]="estadoOptions"
-                                        [(ngModel)]="selectedEstado"
-                                        placeholder="Filtrar por estado"
-                                        (onChange)="onEstadoFilter($event)"
-                                        class="w-full"
-                                    ></p-dropdown>
+                                    <p-dropdown [options]="estadoOptions" [(ngModel)]="selectedEstado"
+                                        placeholder="Filtrar por estado" (onChange)="onEstadoFilter($event)"
+                                        class="w-full"></p-dropdown>
                                 </div>
                                 <div class="mb-2">
-                                    <button
-                                        pButton
-                                        label="Descargar en Excel"
-                                        icon="pi pi-file-excel"
-                                        id="btnNuevo"
-                                        class="p-button-success mr-2"
-                                        (click)="exportarAExcel()"
-                                        style="border-radius: 30px"
-                                    ></button>
+                                    <button pButton label="Descargar en Excel" icon="pi pi-file-excel" id="btnNuevo"
+                                        class="p-button-success mr-2" (click)="exportarAExcel()"
+                                        style="border-radius: 30px"></button>
                                 </div>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th
-                                    style="min-width: 10rem"
-                                    scope="col"
-                                    *ngIf="
-                                        helpersService.getRolId() !== 23
-                                    "
-                                >
+                                <th style="min-width: 10rem" scope="col" *ngIf="helpersService.getRolId() !== 23">
                                     Acciones
                                 </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Código
-                                </th>
+
                                 <th style="min-width: 10rem" scope="col">
                                     DNI
                                 </th>
@@ -83,87 +49,108 @@
                                     Nombres
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Celular
+                                    Distrito
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    % de Avance
+                                    Provincia
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Región
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Estado
-                                </th>   
+                                </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Región
-                                </th>   
+                                    % AV
+                                </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Provincia
-                                </th>   
-                                <th style="min-width: 10rem" scope="col">
-                                    Distrito
-                                </th>                                
+                                    Celular
+                                </th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-postulante>
                             <tr>
-                                <td
-                                    *ngIf="
-                                        helpersService.getRolId() !== 23
-                                    "
-                                >
-                                    <button
-                                        pButton
-                                        icon="pi pi-pencil"
-                                        style="width: 70px; border-radius: 30px"
-                                        title="Editar"
-                                        class="p-button-rounded p-button-text p-button-warning"
-                                        (click)="navigateToEdit(postulante)"
-                                    ></button>
-                                    <button
-                                    *ngIf="
-                                    helpersService.getRolId() !== 25
-                                "
-                                        pButton
-                                        icon="pi pi-trash"
-                                        style="width: 70px; border-radius: 30px"
-                                        title="Eliminar"
-                                        class="p-button-rounded p-button-text p-button-danger"
-                                        (click)="
+                                <td *ngIf="helpersService.getRolId() !== 23">
+                                    <button pButton icon="pi pi-pencil" style="width: 70px; border-radius: 30px"
+                                        title="Editar" class="p-button-rounded p-button-text p-button-warning"
+                                        (click)="navigateToEdit(postulante)"></button>
+                                    <button *ngIf="helpersService.getRolId() !== 25" pButton icon="pi pi-trash"
+                                        style="width: 70px; border-radius: 30px" title="Eliminar"
+                                        class="p-button-rounded p-button-text p-button-danger" (click)="
                                             navigateToDelete(postulante.id)
-                                        "
-                                    ></button>
+                                        "></button>
                                 </td>
-                                <td>{{ postulante.code || "Sin código" }}</td>
                                 <td>
                                     {{
-                                        postulante.identification_number ||
-                                            "Sin documento"
+                                    postulante.identification_number ||
+                                    "Sin documento"
                                     }}
                                 </td>
 
-                                <td>{{ postulante.apaterno || "Sin apellido paterno" }}</td>
-                                <td>{{ postulante.amaterno || "Sin apellido materno" }}</td>
+                                <td>
+                                    {{
+                                    postulante.apaterno ||
+                                    "Sin apellido paterno"
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                    postulante.amaterno ||
+                                    "Sin apellido materno"
+                                    }}
+                                </td>
 
                                 <td>{{ postulante.nombre || "Sin nombre" }}</td>
                                 <td>
+                                    {{
+                                    postulante?.distrito?.name ||
+                                    "Sin Distrito"
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                    postulante?.distrito?.province?.name ||
+                                    "Sin Provincia"
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                    postulante?.distrito?.department
+                                    ?.name || "Sin Region"
+                                    }}
+                                </td>
+                                <td>
+                                    <div class="estColor" [ngClass]="{
+                                            'estado-aprobado':
+                                                postulante.estado_actual ===
+                                                'aprobado',
+                                            'estado-desaprobado':
+                                                postulante.estado_actual ===
+                                                'desaprobado',
+                                            'estado-observado':
+                                                postulante.estado_actual ===
+                                                'observado',
+                                            'estado-evaluacion':
+                                                postulante.estado_actual ===
+                                                'en_evaluacion'
+                                        }">
+                                        {{
+                                        formatEstado(
+                                        postulante.estado_actual
+                                        )
+                                        }}
+                                    </div>
+                                </td>
+                                <td>
+                                    {{
+                                    postulante.education_degree_id ||
+                                    "Sin % de Avance"
+                                    }}
+                                </td>
+                                <td>
                                     {{ postulante.phone || "Sin teléfono" }}
                                 </td>
-                                <td>
-                                    {{ postulante.education_degree_id || "Sin % de Avance" }}
-                                </td>
-                                <td>
-                                    <div class="estColor"
-                                        [ngClass]="{
-                                            'estado-aprobado': postulante.estado_actual === 'aprobado',
-                                            'estado-desaprobado': postulante.estado_actual === 'desaprobado',
-                                            'estado-observado': postulante.estado_actual === 'observado',
-                                            'estado-evaluacion': postulante.estado_actual === 'en_evaluacion'
-                                        }">
-                                        {{ formatEstado(postulante.estado_actual) }}
-                                    </div>
-                                </td>    
-                                <td>{{ postulante?.distrito?.department?.name || "Sin Region"}} </td>
-                                <td>{{ postulante?.distrito?.province?.name || "Sin Provincia"}}</td>
-                                <td>{{ postulante?.distrito?.name || "Sin Distrito"}}</td>                                
                             </tr>
                         </ng-template>
 
