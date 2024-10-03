@@ -191,26 +191,44 @@ export class ReporteDatosPersonalComponent {
         });
     }
     exportarAExcel() {
-        const exportData = this.candidatoList.map(postulante => ({
-            'Código': postulante.code || 'Sin código',
-            'A. Paterno': postulante.apaterno || 'Sin apellido paterno',
-            'A. Materno': postulante.amaterno || 'Sin apellido materno',
-            'Nombre': postulante.nombre || 'Sin nombre',
-            'Celular': postulante.phone || 'Sin teléfono',
-            '% de Avance': postulante.education_degree_id || 'Sin % de Avance',
-            'Estado': this.formatEstado(postulante.estado_actual),
-            'Documento de Identidad': postulante.identification_number || 'Sin documento',
+        // Crear un array con las cabeceras que deseas
+        const headers = [
+            'Código',
+            'DNI',
+            'A. Paterno',
+            'A. Materno',
+            'Nombres',
+            'Celular',
+            '% de Avance',
+            'Estado',
+            'Región',
+            'Provincia',
+            'Distrito'
+        ];
+    
+        // Crear un array con los datos formateados
+        const data = this.candidatoList.map(postulante => ({
+            code: postulante.code || "Sin código",
+            dni: postulante.identification_number || "Sin documento",
+            apaterno: postulante.apaterno || "Sin apellido paterno",
+            amaterno: postulante.amaterno || "Sin apellido materno",
+            nombre: postulante.nombre || "Sin nombre",
+            celular: postulante.phone || "Sin teléfono",
+            avance: postulante.education_degree_id || "Sin % de Avance",
+            estado: this.formatEstado(postulante.estado_actual),
+            region: postulante?.distrito?.department?.name || "Sin región",
+            provincia: postulante?.distrito?.province?.name || "Sin provincia",
+            distrito: postulante?.distrito?.name || "Sin distrito",
         }));
     
-        // Crear una hoja de trabajo
-        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+        // Crear un nuevo libro de Excel
+        const worksheet = XLSX.utils.json_to_sheet(data, { header: Object.keys(data[0]) });
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Candidatos');
     
-        // Crear un libro de trabajo y agregar la hoja
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Candidatos');
-    
-        // Guardar el archivo
-        XLSX.writeFile(wb, 'candidatos.xlsx');
+        // Exportar el archivo
+        XLSX.writeFile(workbook, 'candidatos.xlsx');
     }
+    
     
 }
