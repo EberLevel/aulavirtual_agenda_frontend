@@ -207,16 +207,17 @@ export class DatosPersonalesCandidatoComponent {
     }
 
     onGlobalFilter(event: Event) {
-        const filterValue = (
-            event.target as HTMLInputElement
-        ).value.toLowerCase();
+        const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
         if (!filterValue) {
             this.candidatoList = [...this.originalCandidatoList];
             return;
         }
-
+    
         this.candidatoList = this.originalCandidatoList.filter((postulante) =>
-            postulante.nombre.toLowerCase().includes(filterValue)
+            postulante.identification_number?.toLowerCase().includes(filterValue) ||
+            postulante.nombre?.toLowerCase().includes(filterValue) ||
+            postulante.apaterno?.toLowerCase().includes(filterValue) ||
+            postulante.amaterno?.toLowerCase().includes(filterValue)
         );
     }
 
