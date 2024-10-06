@@ -93,6 +93,9 @@
                                     REGIÓN
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
+                                    CIUDAD
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
                                     Estado
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
@@ -169,6 +172,9 @@
                                         postulante?.distrito?.department
                                             ?.name || "Sin Region"
                                     }}
+                                </td>
+                                <td>
+                                    {{ postulante.ciudad?.nombre || 'Sin ciudad' }}
                                 </td>
                                 <td>
                                     <div
