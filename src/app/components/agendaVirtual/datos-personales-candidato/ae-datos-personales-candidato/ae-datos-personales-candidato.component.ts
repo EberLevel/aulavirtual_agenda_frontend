@@ -410,18 +410,25 @@ export class AeDatosPersonalesCandidatoComponent {
                     );
                 },
                 (error: any) => {
-                    console.error('Error en la solicitud:', error);
-                    Swal.fire(
-                        'Error',
-                        'Hubo un problema al registrar el postulante',
-                        'error'
-                    );
+                    this.handleBackendError(error);
                 }
             );
         }
     }
     
+    handleBackendError(error: any) {
+        console.error('Error capturado:', error); // Esto imprimirá el error completo en la consola
+    
+        // Revisar si el error es por entrada duplicada
+        if (error.error && error.error.message && error.error.message.includes('Duplicate entry')) {
+            Swal.fire('Error', 'El número de identificación ya existe en el sistema.', 'error');
+        } else {
+            Swal.fire('Error', 'Hubo un problema al registrar el postulante.', 'error');
+        }
+    }
+    
 
+    
     closeModal(event: Event) {
         event.preventDefault();
         this.ref?.close();
