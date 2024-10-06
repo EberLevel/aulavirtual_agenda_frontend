@@ -58,6 +58,9 @@
                                     REGIÓN
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
+                                    CIUDAD
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
                                     Estado
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
@@ -120,6 +123,7 @@
                                     ?.name || "Sin Region"
                                     }}
                                 </td>
+                                <td>{{ postulante.ciudad?.nombre || 'Sin ciudad' }}</td>
                                 <td>
                                     <div class="estColor" [ngClass]="{
                                             'estado-aprobado':
