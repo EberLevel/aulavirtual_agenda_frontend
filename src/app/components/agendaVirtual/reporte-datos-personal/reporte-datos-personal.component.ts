@@ -174,12 +174,13 @@ export class ReporteDatosPersonalComponent {
         }
     
         this.candidatoList = this.originalCandidatoList.filter((postulante) =>
-            postulante.identification_number?.toLowerCase().includes(filterValue) ||
-            postulante.nombre?.toLowerCase().includes(filterValue) ||
-            postulante.apaterno?.toLowerCase().includes(filterValue) ||
-            postulante.amaterno?.toLowerCase().includes(filterValue)
+            String(postulante.identification_number)?.toLowerCase().includes(filterValue) ||
+            String(postulante.nombre)?.toLowerCase().includes(filterValue) ||
+            String(postulante.id)?.toLowerCase().includes(filterValue) ||
+            String(postulante.apaterno)?.toLowerCase().includes(filterValue) ||
+            String(postulante.amaterno)?.toLowerCase().includes(filterValue)
         );
-    }
+    }  
     
 
     onEstadoFilter(event: any) {

@@ -64,6 +64,7 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
+                                <th style="min-width: 10rem" scope="col">ID</th>
                                 <th
                                     style="min-width: 10rem"
                                     scope="col"
@@ -109,11 +110,10 @@
 
                         <ng-template pTemplate="body" let-postulante>
                             <tr>
-                                <td 
-                                *ngIf="
-                                    helpersService.getRolId() !== 23
-                                    "
-                                    >
+                                <td>
+                                    {{ postulante.id || "Sin Id" }}
+                                </td>
+                                <td *ngIf="helpersService.getRolId() !== 23">
                                     <button
                                         pButton
                                         icon="pi pi-pencil"
@@ -174,7 +174,10 @@
                                     }}
                                 </td>
                                 <td>
-                                    {{ postulante.ciudad?.nombre || 'Sin ciudad' }}
+                                    {{
+                                        postulante.ciudad?.nombre ||
+                                            "Sin ciudad"
+                                    }}
                                 </td>
                                 <td>
                                     <div
