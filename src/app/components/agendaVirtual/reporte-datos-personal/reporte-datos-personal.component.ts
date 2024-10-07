@@ -196,6 +196,7 @@ export class ReporteDatosPersonalComponent {
     exportarAExcel() {
         // Crear un array con las cabeceras que deseas
         const headers = [
+            'ID',
             'DNI',
             'A. Paterno',
             'A. Materno',
@@ -210,6 +211,7 @@ export class ReporteDatosPersonalComponent {
     
         // Crear un array con los datos formateados
         const data = this.candidatoList.map(postulante => ({
+            'ID': postulante.id || "Sin ID",
             'DNI': postulante.identification_number || "Sin documento",
             'A. Paterno': postulante.apaterno || "Sin apellido paterno",
             'A. Materno': postulante.amaterno || "Sin apellido materno",
