@@ -25,11 +25,11 @@ export class AeDatosPersonalesCandidatoComponent {
     domain_id: any;
     postulanteId: any;
     departamentoOptions: any[] = [];
-    departamentoId: string = "";
+    departamentoId: string = '';
     provinciaOptions: any[] = [];
-    provinciaId: string = "";
+    provinciaId: string = '';
     distritoOptions: any[] = [];
-    distritoId: string = "";
+    distritoId: string = '';
 
     public afiliacionOptions: any[] = [
         { label: 'Sentimiento Amazonense', value: 'sentimiento_amazonense' },
@@ -80,15 +80,14 @@ export class AeDatosPersonalesCandidatoComponent {
 
         if (this.rolId === 8 || 22) {
             this.postulanteId = this.config.data.postulanteId; // Solo asigna el ID del postulante si el rolId es 8
-            console.log("this.postulanteId",this.postulanteId)
+            console.log('this.postulanteId', this.postulanteId);
         } else if (this.rolId !== 8) {
             this.rolId = 25; // Si el rol no es 8, lo asigna como 21
-            console.log("Cambio")
+            console.log('Cambio');
         }
 
         // Definir las validaciones del formulario
         this.postulanteForm = this.fb.group({
-            code: [{ value: '', disabled: true }],
             apaterno: [''],
             amaterno: [''],
             nombre: [''],
@@ -111,7 +110,7 @@ export class AeDatosPersonalesCandidatoComponent {
             distrito_id: [''],
             departamento: [''],
             provincia: [''],
-            distrito: ['']
+            distrito: [''],
         });
         this.getDepartamentos();
     }
@@ -120,7 +119,7 @@ export class AeDatosPersonalesCandidatoComponent {
         this.ubigeoService.getDepartamentos().subscribe((response) => {
             this.departamentoOptions = response;
         });
-    }    
+    }
 
     onFileChange(event: any) {
         const file = event.files[0]; // Captura el archivo seleccionado
@@ -183,7 +182,10 @@ export class AeDatosPersonalesCandidatoComponent {
         this.rolId = this.helpersService.getRolId();
         this.domain_id = this.helpersService.getDominioId();
 
-        console.log('Candidato ID que se pasa al componente hijo:', this.postulanteId);
+        console.log(
+            'Candidato ID que se pasa al componente hijo:',
+            this.postulanteId
+        );
 
         if (this.rolId === 24) {
             this.postulanteForm.get('estado_actual')?.disable();
@@ -199,11 +201,13 @@ export class AeDatosPersonalesCandidatoComponent {
             this.candidatoService
                 .getCandidatoById(postulanteId)
                 .subscribe((data: any) => {
-                    console.log("console.log(this.postulanteForm)",this.postulanteForm)
+                    console.log(
+                        'console.log(this.postulanteForm)',
+                        this.postulanteForm
+                    );
                     // Asegúrate de que los datos existan antes de hacer el patchValue
                     if (data && data.candidato) {
                         this.postulanteForm.patchValue({
-                            code: data.candidato.code || '',
                             distrito_id: data.candidato.distrito_id,
                             apaterno: data.candidato.apaterno || '',
                             amaterno: data.candidato.amaterno || '',
@@ -225,62 +229,73 @@ export class AeDatosPersonalesCandidatoComponent {
                                 data.candidato.marital_status_id !== null
                                     ? Number(data.candidato.marital_status_id)
                                     : null,
-                            puesto:
-                                data.candidato.puesto || '',
+                            puesto: data.candidato.puesto || '',
                             grado_instruccion:
                                 data.candidato.education_degree_id || '',
                             profesion: data.candidato.profesion || '',
-                            ocupacion_actual: this.afiliacionOptions.find(option => option.value === data.candidato.ocupacion_actual)?.value,
-                            estado_actual: this.estadoOptions.find(option => option.value === data.candidato.estado_actual)?.value,
+                            ocupacion_actual: this.afiliacionOptions.find(
+                                (option) =>
+                                    option.value ===
+                                    data.candidato.ocupacion_actual
+                            )?.value,
+                            estado_actual: this.estadoOptions.find(
+                                (option) =>
+                                    option.value ===
+                                    data.candidato.estado_actual
+                            )?.value,
                             fecha_afiliacion:
                                 this.convertToDate(
                                     data.candidato.date_affiliation
                                 ) || '',
-                                contrasena: data.password_stored ? '********' : '',
+                            contrasena: data.password_stored ? '********' : '',
                         });
                         if (data.candidato.distrito_id) {
-                            this.departamentoId = data.candidato.distrito_id.slice(0, 2);
-                            this.provinciaId = data.candidato.distrito_id.slice(0, 4);
-                            this.distritoId = data.candidato.distrito_id.slice(0, 6);
+                            this.departamentoId =
+                                data.candidato.distrito_id.slice(0, 2);
+                            this.provinciaId = data.candidato.distrito_id.slice(
+                                0,
+                                4
+                            );
+                            this.distritoId = data.candidato.distrito_id.slice(
+                                0,
+                                6
+                            );
                             this.postulanteForm.patchValue({
                                 departamento: this.departamentoId,
                                 provincia: this.provinciaId,
-                                distrito: this.distritoId
+                                distrito: this.distritoId,
                             });
-                            this.ubigeoService.getDepartamentos().subscribe((response) => {
-                                this.departamentoOptions = response;
-                                this.ubigeoService.getProvincias(this.departamentoId).subscribe((response) => {
-                                    this.provinciaOptions = response;
-                                    this.ubigeoService.getDistritos(this.departamentoId, this.provinciaId).subscribe((response) => {
-                                        this.distritoOptions = response;
-                                    });
-                                });                                
-                            });
+                            this.ubigeoService
+                                .getDepartamentos()
+                                .subscribe((response) => {
+                                    this.departamentoOptions = response;
+                                    this.ubigeoService
+                                        .getProvincias(this.departamentoId)
+                                        .subscribe((response) => {
+                                            this.provinciaOptions = response;
+                                            this.ubigeoService
+                                                .getDistritos(
+                                                    this.departamentoId,
+                                                    this.provinciaId
+                                                )
+                                                .subscribe((response) => {
+                                                    this.distritoOptions =
+                                                        response;
+                                                });
+                                        });
+                                });
                         } else {
                             this.postulanteForm.patchValue({
                                 distrito_id: '',
                                 departamento: '',
                                 provincia: '',
-                                distrito: ''
-                            })
+                                distrito: '',
+                            });
                         }
                     } else {
                         console.error(
                             'No se encontraron datos de candidato en la respuesta.'
                         );
-                    }
-                });
-        }
-
-        // Si la acción es agregar un nuevo candidato, puedes asignar directamente el código
-        if (this.acciones === 'add') {
-            this.candidatoService
-                .getDataCreate(this.domain_id)
-                .subscribe((data: any) => {
-                    if (data && data.code) {
-                        this.postulanteForm.patchValue({
-                            code: data.code, // Asignar el valor del código para "add"
-                        });
                     }
                 });
         }
@@ -309,46 +324,46 @@ export class AeDatosPersonalesCandidatoComponent {
 
     guardarPostulante() {
         if (this.postulanteForm.valid) {
-            // Habilita el campo 'code' si está deshabilitado (si es necesario)
-            this.postulanteForm.get('code')?.enable();
-    
-            // Verifica si la contraseña fue modificada
             let contrasena = this.postulanteForm.value.contrasena;
             if (contrasena === '********') {
                 contrasena = null; // No enviar la contraseña si no fue modificada
             }
-    
             // Verificar si `ciudad_id` está presente; si no, obtenerlo del backend
             if (!this.config.data.ciudad_id && this.acciones === 'actualizar') {
                 const candidatoId = this.config.data.data.id;
-                this.candidatoService.getCiudadByCandidato(candidatoId).subscribe(
-                    (response: any) => {
-                        // Asignar el `ciudad_id` recibido de la respuesta y continuar con el guardado o actualización
-                        this.config.data.ciudad_id = response.ciudad_id;
-                        this.enviarDatosCandidato(contrasena);
-                    },
-                    (error: any) => {
-                        console.error('Error al obtener ciudad_id:', error);
-                        Swal.fire(
-                            'Error',
-                            'No se pudo obtener el ID de la ciudad para este candidato.',
-                            'error'
-                        );
-                    }
-                );
+                this.candidatoService
+                    .getCiudadByCandidato(candidatoId)
+                    .subscribe(
+                        (response: any) => {
+                            // Asignar el `ciudad_id` recibido de la respuesta y continuar con el guardado o actualización
+                            this.config.data.ciudad_id = response.ciudad_id;
+                            this.enviarDatosCandidato(contrasena);
+                        },
+                        (error: any) => {
+                            console.error('Error al obtener ciudad_id:', error);
+                            Swal.fire(
+                                'Error',
+                                'No se pudo obtener el ID de la ciudad para este candidato.',
+                                'error'
+                            );
+                        }
+                    );
             } else {
                 // Si ya se tiene el `ciudad_id`, continuar directamente con el guardado o actualización
                 this.enviarDatosCandidato(contrasena);
             }
         } else {
             console.error('Formulario inválido');
-            Swal.fire('Error', 'Formulario inválido, revisar los campos', 'error');
+            Swal.fire(
+                'Error',
+                'Formulario inválido, revisar los campos',
+                'error'
+            );
         }
     }
-    
+
     enviarDatosCandidato(contrasena: string | null) {
         const postulanteData: any = {
-            code: this.postulanteForm.value.code,
             apaterno: this.postulanteForm.value.apaterno,
             amaterno: this.postulanteForm.value.amaterno,
             nombre: this.postulanteForm.value.nombre,
@@ -373,32 +388,34 @@ export class AeDatosPersonalesCandidatoComponent {
             fecha_afiliacion: this.postulanteForm.value.fecha_afiliacion,
             domain_id: this.domain_id,
             ciudad_id: this.config.data.ciudad_id, // Ahora seguro de que tenemos el `ciudad_id`
-            distrito_id: this.distritoId
+            distrito_id: this.distritoId,
         };
-    
+
         console.log('Datos mapeados enviados al backend:', postulanteData);
-    
+
         // Verificar si la acción es actualizar o guardar
         if (this.acciones === 'actualizar') {
             const id = this.config.data.data.id;
-            this.candidatoService.actualizarCandidato(id, postulanteData).subscribe(
-                (response: any) => {
-                    this.ref?.close();
-                    Swal.fire(
-                        '¡Éxito!',
-                        'Los datos se actualizaron correctamente',
-                        'success'
-                    );
-                },
-                (error: any) => {
-                    console.error('Error en la solicitud:', error);
-                    Swal.fire(
-                        'Error',
-                        'Hubo un problema al actualizar el registro',
-                        'error'
-                    );
-                }
-            );
+            this.candidatoService
+                .actualizarCandidato(id, postulanteData)
+                .subscribe(
+                    (response: any) => {
+                        this.ref?.close();
+                        Swal.fire(
+                            '¡Éxito!',
+                            'Los datos se actualizaron correctamente',
+                            'success'
+                        );
+                    },
+                    (error: any) => {
+                        console.error('Error en la solicitud:', error);
+                        Swal.fire(
+                            'Error',
+                            'Hubo un problema al actualizar el registro',
+                            'error'
+                        );
+                    }
+                );
         } else {
             this.candidatoService.guardarCandidato(postulanteData).subscribe(
                 (response: any) => {
@@ -415,20 +432,30 @@ export class AeDatosPersonalesCandidatoComponent {
             );
         }
     }
-    
+
     handleBackendError(error: any) {
         console.error('Error capturado:', error); // Esto imprimirá el error completo en la consola
-    
+
         // Revisar si el error es por entrada duplicada
-        if (error.error && error.error.message && error.error.message.includes('Duplicate entry')) {
-            Swal.fire('Error', 'El número de identificación ya existe en el sistema.', 'error');
+        if (
+            error.error &&
+            error.error.message &&
+            error.error.message.includes('Duplicate entry')
+        ) {
+            Swal.fire(
+                'Error',
+                'El número de identificación ya existe en el sistema.',
+                'error'
+            );
         } else {
-            Swal.fire('Error', 'Hubo un problema al registrar el postulante.', 'error');
+            Swal.fire(
+                'Error',
+                'Hubo un problema al registrar el postulante.',
+                'error'
+            );
         }
     }
-    
 
-    
     closeModal(event: Event) {
         event.preventDefault();
         this.ref?.close();
@@ -443,16 +470,20 @@ export class AeDatosPersonalesCandidatoComponent {
 
     onChangeDepartamento(event: any) {
         this.departamentoId = event.value;
-        this.ubigeoService.getProvincias(this.departamentoId).subscribe((response) => {
-            this.provinciaOptions = response;
-        });
+        this.ubigeoService
+            .getProvincias(this.departamentoId)
+            .subscribe((response) => {
+                this.provinciaOptions = response;
+            });
     }
 
     onChangeProvincia(event: any) {
         this.provinciaId = event.value;
-        this.ubigeoService.getDistritos(this.departamentoId, this.provinciaId).subscribe((response) => {
-            this.distritoOptions = response;
-        });
+        this.ubigeoService
+            .getDistritos(this.departamentoId, this.provinciaId)
+            .subscribe((response) => {
+                this.distritoOptions = response;
+            });
     }
 
     onChangeDistrito(event: any) {
