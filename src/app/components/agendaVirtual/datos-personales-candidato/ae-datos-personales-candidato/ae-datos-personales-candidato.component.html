@@ -233,20 +233,22 @@
                         </span>
                     </div>
 
-                    <!-- <div class="field col-6">
+                    <div class="field col-6" *ngIf="acciones === 'actualizar'">
                         <span class="p-float-label">
                             <p-dropdown
-                                [options]="identificationDocuments"
-                                formControlName="doc_identidad"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="Seleccione un documento"
+                                [options]="ciudadOptions"
+                                formControlName="ciudad"
+                                optionLabel="nombre"
+                                optionValue="id"
+                                placeholder="Seleccione Ciudad"
+                                (onChange)="onChangeCiudad($event)"
+                                [filter]="true"  
+                                filterPlaceholder="Buscar ciudad"
                             ></p-dropdown>
-                            <label for="doc_identidad">Doc. Identidad</label>
+                            <label>Ciudad</label>
                         </span>
-                    </div> -->
-
-
+                    </div>
+                    
 
                     <div class="field col-6">
                         <span class="p-float-label">
@@ -258,8 +260,6 @@
                             <label>% de Avance</label>
                         </span>
                     </div>
-
-
 
                     <div class="field col-6">
                         <span class="p-float-label">
@@ -284,10 +284,6 @@
                             <label>Fecha de afiliación</label>
                         </span>
                     </div> -->
-
-
-
-
                 </div>
             </div>
 
@@ -325,9 +321,9 @@
             </div>
         </form>
         <app-informacion-academica-candidato
-        *ngIf="(rolId === 8 || rolId === 22) && acciones !== 'add'"
-        [candidatoId]="postulanteId"
-        [mostrarAcciones]="false"
-    ></app-informacion-academica-candidato>
+            *ngIf="(rolId === 8 || rolId === 22) && acciones !== 'add'"
+            [candidatoId]="postulanteId"
+            [mostrarAcciones]="false"
+        ></app-informacion-academica-candidato>
     </ng-template>
 </p-panel>
