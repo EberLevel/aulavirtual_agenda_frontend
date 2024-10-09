@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { CandidatoService } from 'src/app/components/onlineclasses/service/candidato.service';
+import { CiudadService } from 'src/app/components/onlineclasses/service/ciudad.service';
 import { UbigeoService } from 'src/app/demo/service/ubigeo.service';
 import { HelpersService } from 'src/app/helpers.service';
 import Swal from 'sweetalert2';
@@ -19,6 +20,8 @@ export class AeDatosPersonalesCandidatoComponent {
         { label: 'Masculino', value: 'M' },
         { label: 'Femenino', value: 'F' },
     ];
+
+    ciudadOptions: any[] = [];
     docIdentidadOptions: any[] = []; // Llenar con opciones del backend
     ocupacionOptions: any[] = []; // Llenar con opciones del backend
     estadoActualOptions: any[] = []; // Llenar con opciones del backend
@@ -37,14 +40,12 @@ export class AeDatosPersonalesCandidatoComponent {
         { label: 'Ningún Partido', value: 'ningun_partido' },
         { label: 'Otro Partido', value: 'otro_partido' },
     ];
-
     public estadoOptions: any[] = [
         { label: 'Aprobado', value: 'aprobado', color: 'green' },
         { label: 'Desaprobado', value: 'desaprobado', color: 'red' },
         { label: 'Observado', value: 'observado', color: 'yellow' },
         { label: 'En Evaluación', value: 'en_evaluacion', color: 'gray' },
     ];
-
     public identificationDocuments: any[] = [
         { label: 'DNI', value: 1 },
         { label: 'CE', value: 2 },
@@ -55,10 +56,12 @@ export class AeDatosPersonalesCandidatoComponent {
         { label: 'Viudo', value: 2 },
         { label: 'Divorciado', value: 3 },
     ];
+
     public gradoInstruccionOptions: any[] = [];
     public profesionOptions: any[] = [];
     public selectedEstadoColor: string = '';
     passwordStored!: boolean;
+    ciudadId: any;
     constructor(
         private fb: FormBuilder,
         private ref: DynamicDialogRef,
@@ -66,6 +69,7 @@ export class AeDatosPersonalesCandidatoComponent {
         private candidatoService: CandidatoService,
         private helpersService: HelpersService,
         private ubigeoService: UbigeoService,
+        private ciudadService: CiudadService,
         private cd: ChangeDetectorRef
     ) {
         this.acciones = this.config.data.acciones;
@@ -80,7 +84,6 @@ export class AeDatosPersonalesCandidatoComponent {
 
         if (this.rolId === 8 || 22) {
             this.postulanteId = this.config.data.postulanteId; // Solo asigna el ID del postulante si el rolId es 8
-            console.log('this.postulanteId', this.postulanteId);
         } else if (this.rolId !== 8) {
             this.rolId = 25; // Si el rol no es 8, lo asigna como 21
             console.log('Cambio');
@@ -107,6 +110,7 @@ export class AeDatosPersonalesCandidatoComponent {
             imagen: [''],
             estado_actual: ['en_evaluacion'],
             fecha_afiliacion: [''],
+            ciudad: [''],
             distrito_id: [''],
             departamento: [''],
             provincia: [''],
@@ -181,10 +185,20 @@ export class AeDatosPersonalesCandidatoComponent {
     ngOnInit(): void {
         this.rolId = this.helpersService.getRolId();
         this.domain_id = this.helpersService.getDominioId();
+        this.ciudadId = this.config.data.ciudad_id;
+        console.log('this.ciudadId', this.ciudadId);
 
-        console.log(
-            'Candidato ID que se pasa al componente hijo:',
-            this.postulanteId
+        this.ciudadService.getCiudadesByDomain(this.domain_id).subscribe(
+            (response: any) => {
+                // Asignar el resultado a ciudadOptions para mostrarlo en el dropdown
+                this.ciudadOptions = response.map((ciudad: any) => ({
+                    id: ciudad.id,
+                    nombre: ciudad.nombre,
+                }));
+            },
+            (error) => {
+                console.error('Error al obtener ciudades:', error);
+            }
         );
 
         if (this.rolId === 24) {
@@ -201,10 +215,6 @@ export class AeDatosPersonalesCandidatoComponent {
             this.candidatoService
                 .getCandidatoById(postulanteId)
                 .subscribe((data: any) => {
-                    console.log(
-                        'console.log(this.postulanteForm)',
-                        this.postulanteForm
-                    );
                     // Asegúrate de que los datos existan antes de hacer el patchValue
                     if (data && data.candidato) {
                         this.postulanteForm.patchValue({
@@ -248,6 +258,10 @@ export class AeDatosPersonalesCandidatoComponent {
                                     data.candidato.date_affiliation
                                 ) || '',
                             contrasena: data.password_stored ? '********' : '',
+                            ciudad:
+                                data.candidato.ciudad_id ||
+                                this.config.data.ciudad_id ||
+                                '',
                         });
                         if (data.candidato.distrito_id) {
                             this.departamentoId =
@@ -363,6 +377,13 @@ export class AeDatosPersonalesCandidatoComponent {
     }
 
     enviarDatosCandidato(contrasena: string | null) {
+        const ciudadId =
+            this.postulanteForm.value.ciudad ||
+            this.config.data.ciudad_id ||
+            null;
+
+        console.log('ciudadId a enviar:', ciudadId);
+
         const postulanteData: any = {
             apaterno: this.postulanteForm.value.apaterno,
             amaterno: this.postulanteForm.value.amaterno,
@@ -372,6 +393,7 @@ export class AeDatosPersonalesCandidatoComponent {
             fecha_nacimiento: this.postulanteForm.value.fecha_nacimiento,
             email: this.postulanteForm.value.email,
             password: contrasena, // Usar la variable `contrasena` pasada como argumento
+            ciudad_id: ciudadId, // Ciudad ID correcto dependiendo de la acción
             identification_document_id: this.postulanteForm.value.doc_identidad,
             identification_number: this.postulanteForm.value.numero_documento,
             marital_status_id:
@@ -387,7 +409,6 @@ export class AeDatosPersonalesCandidatoComponent {
             estado_actual: this.postulanteForm.value.estado_actual,
             fecha_afiliacion: this.postulanteForm.value.fecha_afiliacion,
             domain_id: this.domain_id,
-            ciudad_id: this.config.data.ciudad_id, // Ahora seguro de que tenemos el `ciudad_id`
             distrito_id: this.distritoId,
         };
 
@@ -488,5 +509,9 @@ export class AeDatosPersonalesCandidatoComponent {
 
     onChangeDistrito(event: any) {
         this.distritoId = event.value;
+    }
+
+    onChangeCiudad(event: any): void {
+        console.log('Ciudad seleccionada:', event.value);
     }
 }
